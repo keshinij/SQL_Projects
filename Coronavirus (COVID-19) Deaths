@@ -1,8 +1,11 @@
 # SQL Data Exploration
   
 /* 
+
   Dataset: https://ourworldindata.org/covid-deaths
+
 */
+
 
 SELECT * 
 FROM covid_deaths
@@ -15,3 +18,36 @@ ORDER BY 3, 4;
 SELECT location, date, total_cases, new_cases, total_deaths, population
 FROM covid.covid_deaths
 ORDER BY 1, 2;
+
+-- Total Cases vs Total Deaths
+SELECT location, SUM(total_cases), SUM(total_deaths)
+FROM covid.covid_deaths
+GROUP BY location;
+
+-- Add a column showing Death Percentage which shows the likelihood of dying from COVID.
+SELECT location, date, total_cases, total_deaths, ROUND((total_deaths/total_cases)*100,2) AS deathPercentage
+FROM covid.covid_deaths
+ORDER BY 1, 2;
+
+-- Show a Death Percentage column for USA.
+SELECT location, date, total_cases, total_deaths, ROUND((total_deaths/total_cases)*100,2) AS deathPercentage
+FROM covid.covid_deaths
+WHERE location LIKE '%States%'
+ORDER BY 1, 2;
+
+-- Looking at total cases vs population. Shows what percentage of population has gotten COVID.
+SELECT location, date, total_cases, population, (total_cases/population)*100 AS percentPopulationInfected
+FROM covid.covid_deaths
+ORDER BY 1, 2;
+
+-- Looking at countries with highest infection rate compared to population.
+SELECT location, population, MAX(total_cases) AS highestInfectionCount, MAX((total_cases/population)*100) AS percentPopulationInfected
+FROM covid.covid_deaths
+GROUP BY location, population
+ORDER BY percentPopulationInfected DESC;
+
+-- SHOWING countries with highest death count per population.
+SELECT location, MAX(total_deaths) AS highestDeathCount
+FROM covid.covid_deaths
+GROUP BY location
+ORDER BY highestDeathCount DESC;
