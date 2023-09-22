@@ -1,5 +1,7 @@
-/*
-  Dataset Link: https://ourworldindata.org/covid-deaths
+# SQL Data Exploration
+  
+/* 
+  Dataset: https://ourworldindata.org/covid-deaths
 */
 
 SELECT * 
