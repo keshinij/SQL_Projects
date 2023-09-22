@@ -1,15 +1,14 @@
-# SQL Data Exploration
+SQL Data Exploration
   
 /* 
-
   Dataset: https://ourworldindata.org/covid-deaths
-
 */
 
 
 SELECT * 
 FROM covid_deaths
-ORDER BY 3, 4;         /* With ORDER BY, we don't need to write column name, we can only write the coulmn number */
+WHERE continent IS NOT NULL
+ORDER BY 3, 4;                   /* With ORDER BY, we don't need to write column name, we can only write the coulmn number */
 
 SELECT * 
 FROM covid_vaccinations
@@ -51,3 +50,5 @@ SELECT location, MAX(total_deaths) AS highestDeathCount
 FROM covid.covid_deaths
 GROUP BY location
 ORDER BY highestDeathCount DESC;
+
+
