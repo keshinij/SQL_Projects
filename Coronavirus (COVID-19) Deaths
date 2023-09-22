@@ -25,6 +25,7 @@ ORDER BY 1, 2;
 
 SELECT * 
 FROM covid_vaccinations
+WHERE continent IS NOT NULL
 ORDER BY 3, 4;
 
 
@@ -34,6 +35,7 @@ SELECT location, date, total_cases, total_deaths, ROUND((total_deaths/total_case
 FROM covid.covid_deaths
 ORDER BY 1, 2;
 
+
 -- show the likelihood of dying if you contract covid in the United States
 
 SELECT location, date, total_cases, total_deaths, ROUND((total_deaths/total_cases)*100,2) AS deathPercentage
@@ -41,11 +43,13 @@ FROM covid.covid_deaths
 WHERE location LIKE '%States%'
 ORDER BY 1, 2;
 
+
 -- show what percentage of population were infected with covid
 
 SELECT location, date, total_cases, population, (total_cases/population)*100 AS percentPopulationInfected
 FROM covid.covid_deaths
 ORDER BY 1, 2;
+
 
 -- countries with highest infection rate compared to population
 
@@ -53,6 +57,27 @@ SELECT location, population, MAX(total_cases) AS highestInfectionCount, MAX((tot
 FROM covid.covid_deaths
 GROUP BY location, population
 ORDER BY percentPopulationInfected DESC;
+
+
+-- join the 2 tables
+
+SELECT *
+FROM covid.covid_deaths de JOIN covid.covid_vaccinations va
+ON de.location=va.location AND de.date=va.date;
+
+/* Joining tables by just one column does not work in some scenarios. In situations like these, you may need to use multiple columns to join tables. */
+
+
+-- shows total number of vaccinated persons per date for each country
+
+SELECT de.continent, de.location, de.date, population, total_vaccinations, SUM(va.total_vaccinations) OVER(PARTITION BY de.location ORDER BY de.location, de.date) AS rollingPeopleVaccinated
+FROM covid.covid_deaths de JOIN covid.covid_vaccinations va
+ON de.location=va.location AND de.date=va.date
+WHERE de.continent IS NOT NULL
+ORDER BY 2, 3;
+
+
+
 
 
 
