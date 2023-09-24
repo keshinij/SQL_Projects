@@ -2,6 +2,7 @@ SQL Data Exploration
   
 /*  dataset: https://ourworldindata.org/covid-deaths  */
 
+
 CREATE DATABASE IF NOT EXISTS covid;
 USE covid;
 
